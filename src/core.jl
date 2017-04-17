@@ -34,10 +34,11 @@ end
 
 A `Drawable` infinte length line having perpendicular length `ρ` from
 origin and angle `θ` between the perpendicular and x-axis
+
 """
-immutable LineNormal <: Line
-    ρ::Real
-    θ::Real
+immutable LineNormal{T<:Real, U<:Real} <: Line
+    ρ::T
+    θ::U
 end
 
 """
@@ -52,13 +53,13 @@ immutable CircleThreePoints <: Circle
 end
 
 """
-    circle = CirclePointRadius(p, ρ)
+    circle = CirclePointRadius(c, ρ)
 
-A `Drawable` circle having center `p` and radius `ρ`
+A `Drawable` circle having center `c` and radius `ρ`
 """
-immutable CirclePointRadius <: Circle
+immutable CirclePointRadius{T<:Real} <: Circle
     center::Point
-    ρ::Real
+    ρ::T
 end
 
 """
@@ -74,7 +75,10 @@ end
 """
     path = Path([point])
 
-A `Drawable` sequence of line segments
+A `Drawable` sequence of line segments connecting consecutive pairs
+of points in `[point]`.
+!!! note
+    This will create a non-closed path. For a closed path, see `Polygon`
 """
 immutable Path <: Drawable
     vertices::Vector{Point}
@@ -84,17 +88,22 @@ end
     ellipse = Ellipse(center, ρx, ρy)
 
 A `Drawable` ellipse with center `center` and parameters `ρx` and `ρy`
+!!! note
+    `ρx` and `ρy` must have same type
 """
-immutable Ellipse <: Drawable
+immutable Ellipse{T<:Real, U<:Real} <: Drawable
     center::Point
-    ρx::Real
-    ρy::Real
+    ρx::T
+    ρy::U
 end
 
 """
     polygon = Polygon([vertex])
 
-A `Drawable` polygon represented by a `Vector` of vertices
+A `Drawable` polygon represented by a points in `[vertex]`. It is
+a closed path created by joining the consecutive points in `[vertex]`
+!!! note
+    This will create a closed path. For a non-closed path, see `Path`
 """
 immutable Polygon <: Drawable
     vertices::Vector{Point}
@@ -109,13 +118,16 @@ A `Drawable` regular polygon.
 * `center::Point` : the center of the polygon
 * `side_count::Int` : number of sides of the polygon
 * `side_length::Real` : length of each side
-* `θ::Real` : orientation of the polygon w.r.t x-axis
+* `θ::Real` : orientation of the polygon w.r.t x-axis (in radians)
+
+!!! note
+    `θ` and `side_length` must be have same type
 """
-immutable RegularPolygon <: Drawable
+immutable RegularPolygon{T<:Real, U<:Real} <: Drawable
     center::Point
     side_count::Int
-    side_length::Real
-    θ::Real
+    side_length::T
+    θ::U
 end
 
 """
@@ -141,9 +153,7 @@ function draw!{T<:Colorant, U<:Drawable, V<:Colorant}(img::AbstractArray{T,2}, o
     while length(colors) < length(objects)
         push!(colors, one(T))
     end
-    map(objects, colors) do object, color
-        draw!(img, object, color)
-    end
+    foreach((object, color) -> draw!(img, object, color), objects, colors)
     img
 end
 
@@ -163,7 +173,7 @@ draw{T<:Colorant}(img::AbstractArray{T,2}, args...) = draw!(copy(img), args...)
 Point(p::CartesianIndex) = Point(p[2], p[1])
 
 function draw!{T<:Colorant}(img::AbstractArray{T,2}, point::Point, color::T)
-    if CartesianIndex(point.y, point.x) ∈ CartesianRange(size(img))
+    if CartesianIndex(point.y, point.x) ∈ CartesianRange(indices(img))
         img[point.y, point.x] = color
     end
     img
