@@ -31,4 +31,3 @@
     expected = zeros(Gray{N0f8})
     @test all(img .== expected) == true
 end
-
