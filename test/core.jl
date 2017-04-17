@@ -11,6 +11,11 @@
     expected = diagm([0.8,0.8,0.8])
     @test all(img .== expected) == true
 
+    img = zeros(Gray{N0f8}, 3, 3)
+    draw!(img, points, [Gray{N0f8}(0.8)])
+    expected = diagm([0.8,1,1])
+    @test all(img .== expected) == true
+
     points = [Point((1,1)), Point((2,2)), Point((3,3))]
     img = zeros(Gray{N0f8}, 3, 3)
     draw!(img, points)

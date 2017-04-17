@@ -59,7 +59,7 @@ end
     poly_tuples = [(1,1),(3,1),(5,1),(3,3),(1,3)]
 
     img=zeros(RGB{N0f8},5,5)
-    draw!(img, Path(vert))
+    draw!(img, Path(poly_tuples))
     @test all(x->x==RGB{N0f8}(1,1,1), img[1,:])==true
     @test all(x->x==RGB{N0f8}(1,1,1), img[3,1:3])==true
     @test all(x->x==RGB{N0f8}(0,0,0), img[2,1:3])==true
