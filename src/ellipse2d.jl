@@ -22,5 +22,6 @@ function draw!{T<:Colorant}(img::AbstractArray{T, 2}, ellipse::Ellipse, color::T
 		img[yi, 2 * ellipse.center.x - xi] = color
 		img[2 * ellipse.center.y - yi, 2 * ellipse.center.x - xi] = color
 	end
+	
 	img
 end
