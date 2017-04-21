@@ -1,6 +1,6 @@
 module ImageDrawTest
 
-using Base.Test, ImageDraw, ImageCore, ColorTypes, ColorVectorSpace, FixedPointNumbers
+# using Base.Test, ImageDraw, ImageCore, ColorTypes, ColorVectorSpace, FixedPointNumbers
 
 tests = [
     "core.jl",
@@ -9,11 +9,14 @@ tests = [
     "circle2d.jl",
     "paths.jl"
 ]
-
+#=
 for t in tests
     @testset "$t" begin
         include(t)
     end
-end
+end=#
+
+D = det([1 2 3; 1 2 3; 1 1 1])
+@show D
 
 end
