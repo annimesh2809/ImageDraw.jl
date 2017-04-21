@@ -22,6 +22,10 @@
     res = draw(img, Ellipse(CirclePointRadius(5,5,5)))
     @test all(expected .== res) == true
 
+    res = draw(img, Ellipse(5, 5, 5, 5), Gray{N0f8}(0.5))
+    expected = map(i->(i==1 ? Gray{N0f8}(0.5) : Gray{N0f8}(0)), expected)
+    @test all(expected .== res) == true
+
     res = draw(img, Ellipse(CartesianIndex(5,5), 5, 3))
     expected = Gray{N0f8}[  0 0 0 0 0 0 0 0 0 0
                             0 0 0 0 0 0 0 0 0 0
@@ -32,20 +36,6 @@
                             0 1 1 1 1 1 1 1 0 0
                             0 0 0 0 0 0 0 0 0 0
                             0 0 0 0 0 0 0 0 0 0
-                            0 0 0 0 0 0 0 0 0 0
-                                        ]
-    @test all(expected .== res) == true
-
-    res = draw(img, Ellipse(5, 5, 5, 5), Gray{N0f8}(0.5))
-    expected = Gray{N0f8}[  0.0 0.0 0.5 0.5 0.5 0.5 0.5 0.0 0.0 0.0
-                            0.0 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0 0.0
-                            0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0
-                            0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0
-                            0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0
-                            0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0
-                            0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0
-                            0.0 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.0 0.0
-                            0.0 0.0 0.5 0.5 0.5 0.5 0.5 0.0 0.0 0.0
-                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 ]
+                            0 0 0 0 0 0 0 0 0 0 ]
     @test all(expected .== res) == true
 end
