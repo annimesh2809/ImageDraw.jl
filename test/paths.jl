@@ -64,6 +64,13 @@ end
     @test all(x->x==RGB{N0f8}(1,1,1), img[3,1:3])==true
     @test all(x->x==RGB{N0f8}(0,0,0), img[2,1:3])==true
     @test img[2,4]==RGB{N0f8}(1,1,1)
+
+    img = zeros(Gray{N0f8},5,5)
+    invalid_points = [(6,1), (4,4), (1,7), (7,6)]
+    @test_throws ErrorException draw!(img, Path(invalid_points))
+
+    invalid_points = [(4,4), (1,7), (7,6)]
+    @test_throws ErrorException draw!(img, Path(invalid_points))
 end
 
 @testset "RegularPolygon" begin
